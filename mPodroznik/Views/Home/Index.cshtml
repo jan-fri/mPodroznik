@@ -1,29 +1,56 @@
-﻿
+﻿@model IEnumerable<mPodroznik.ViewModel.BusViewModel>
 @{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <script>
-function initialize() {
-  var mapProp = {
-    center:new google.maps.LatLng(49.82,19.0240),
-    zoom:12,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-}
-google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-</head>
+<div class="form-group">
+    <label class="col-lg-2 control-label" for="hobies">Linia autobusowa:</label>
+    <fieldset>
+        <div class="col-lg-10">
+            @using (Html.BeginForm("ShowRoute", "BusRoute", FormMethod.Post))
+            {
+                @Html.DropDownList("BusNumber",
+         new SelectList(Model.Select(i => i.BusNumber).ToList()),
+         new { @class = "input-large form-control" })
+                <input type="submit" value="Szczegóły" />
+            }
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+                <input type="submit" value="Pokaż trasę" />
+            }
+        </div>
 
-<body>
-    <div id="googleMap" style="width:800px;height:600px;"></div>
-</body>
+    </fieldset>
+</div>
 
-</html> 
+
+
+
+
+
+
+
+@*<!DOCTYPE html>
+        <html>
+        <head>
+            <script src="http://maps.googleapis.com/maps/api/js"></script>
+            <script>
+                function initialize() {
+                    var mapProp = {
+                        center: new google.maps.LatLng(49.82, 19.0240),
+                        zoom: 12,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+                }
+                google.maps.event.addDomListener(window, 'load', initialize);
+            </script>
+        </head>
+
+        <body>
+            <div id="googleMap" style="width:800px;height:600px;"></div>
+        </body>
+
+    </html>*@

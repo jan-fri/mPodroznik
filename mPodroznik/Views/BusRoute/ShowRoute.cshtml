@@ -1,0 +1,29 @@
+﻿@model IEnumerable<mPodroznik.ViewModel.BusStopViewModel>
+
+@{
+    ViewBag.Title = "Trasa";
+}
+
+<h2>Linia nr: @Model.Select(b => b.BusID).FirstOrDefault()</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>nr</th>
+                <th>Przystanek</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 0;}
+            @foreach (var busStop in Model)
+            {                
+                <tr>
+                    <td>@(1 + i)</td>
+                    <td>@busStop.Name</td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</div>
