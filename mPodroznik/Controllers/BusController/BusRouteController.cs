@@ -1,11 +1,6 @@
-﻿using AutoMapper;
-using mPodroznik.Domain.Entities;
-using mPodroznik.HelperClass;
+﻿using mPodroznik.HelperClass.ViewModel;
 using mPodroznik.ViewModel;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace mPodroznik.Controllers.BusController

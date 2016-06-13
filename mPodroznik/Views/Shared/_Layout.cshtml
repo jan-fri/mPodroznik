@@ -9,6 +9,19 @@
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
+    <div style="width:auto; background-color:aqua">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <strong>@Html.Encode(User.Identity.Name)</strong>
+            @Html.ActionLink("Log Out", "Logout", "Login")
+        }
+        else
+        {
+            @Html.ActionLink("Register", "Register", "Registration")
+            <span> | </span>
+            @Html.ActionLink("Log In", "Login", "Login")
+        }
+    </div>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -19,9 +32,6 @@
                 </button>
 
                     @Html.ActionLink("Pokaż mapę", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-
-                    @Html.ActionLink("Pokaż mapę", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
- 
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav"></ul>

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
-using mPodroznik.Models;
-using mPodroznik.ViewModel;
-using AutoMapper;
-using mPodroznik.HelperClass;
+using mPodroznik.Domain.Entities;
+using mPodroznik.HelperClass.ViewModel;
 
 namespace mPodroznik.Controllers
 {

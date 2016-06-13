@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using mPodroznik.Models;
+using mPodroznik.Domain.Entities;
 using mPodroznik.ViewModel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace mPodroznik.HelperClass
+namespace mPodroznik.HelperClass.ViewModel
 {
     public class ViewModelRepozytory
     {
