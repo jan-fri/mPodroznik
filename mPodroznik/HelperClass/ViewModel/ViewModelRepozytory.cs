@@ -17,5 +17,7 @@ namespace mPodroznik.HelperClass.ViewModel
         {
             return _busList;
         }
+
+        
     }
 }

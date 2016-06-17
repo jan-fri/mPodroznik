@@ -211,9 +211,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\BusRoute\ShowRoute.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Registration\Register.cshtml" />
+    <Content Include="Views\BusRoute\ShowRouteTable.cshtml" />
+    <Content Include="Views\BusRoute\ShowRouteMap.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -9,19 +9,20 @@ namespace mPodroznik.Controllers.BusController
     {
         ViewModelRepozytory repo = new ViewModelRepozytory();
 
-        [HttpPost]
-        public ActionResult ShowRoute(BusViewModel busNum)
+ 
+        public ActionResult ShowRouteTable(BusViewModel busNum)
         {
             var busList = repo.GetBusList();
             var buses = busList.Where(b => b.BusNumber == busNum.BusNumber).FirstOrDefault();
 
             return View(buses.BusStops);
         }
+        public ActionResult ShowRouteMap(BusViewModel busNum)
+        {
+            var busList = repo.GetBusList();
+            var buses = busList.Where(b => b.BusNumber == busNum.BusNumber).FirstOrDefault();
 
-        //[HttpGet]
-        //public ActionResult AddStop()
-        //{
-
-        //}
+            return View(buses.BusStops);
+        }
     }
 }
