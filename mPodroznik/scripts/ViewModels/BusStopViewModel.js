@@ -10,10 +10,10 @@
     self.busStops = busStops;
     self.busStop = {
         id: ko.observable(busStop.id),
-        busid: ko.observable(busStop.busId),
+        busId: ko.observable(busStop.busId),
         busStopName: ko.observable(busStop.busStopName),
         gpsLat: ko.observable(busStop.gpsLat),
-        gpsLng: ko.observable(busStop.gpsLng),
+        gpsLng: ko.observable(busStop.gpsLng)
     };
 
     //self.validateAndSave = function (form) {

@@ -13,23 +13,30 @@ namespace mPodroznik.Controllers.BusController
     public class BusRouteController : Controller
     {
         ViewModelRepozytory repo = new ViewModelRepozytory();
-        private static List<BusStopViewModel> _busStopsVM;
- 
+        private static List<BusStopViewModel> _busStopsVMList;
+        private static int _busStopID;
+        private static BusStopViewModel _busStopVM;
         private BusContex db = new BusContex();
+
 
         public ActionResult ShowRouteTable(BusViewModel busNum)
         {
-            var busList = repo.GetBusListViewModel();
-            var buses = busList.Where(b => b.BusNumber == busNum.BusNumber).FirstOrDefault();
-            _busStopsVM = buses.BusStops;
-            return View(_busStopsVM);
+            if (busNum.BusNumber != null)
+            {
+                var busList = repo.GetBusListViewModel();
+                var buses = busList.Where(b => b.BusNumber == busNum.BusNumber).FirstOrDefault();
+                _busStopsVMList = buses.BusStops;
+            }
+            var orderedBusStops = _busStopsVMList.OrderBy(x => x.BusStopOrder).ToArray();
+            return View(orderedBusStops);
         }
         public ActionResult ShowRouteMap(BusViewModel busNum)
         {
             var busList = repo.GetBusListViewModel();
             var buses = busList.Where(b => b.BusNumber == busNum.BusNumber).FirstOrDefault();
-            _busStopsVM = buses.BusStops;
-            return View(_busStopsVM);
+            _busStopsVMList = buses.BusStops;
+            var orderedBusStops = _busStopsVMList.OrderBy(x => x.BusStopOrder).ToArray();
+            return View(orderedBusStops);
 
         }
 
@@ -40,14 +47,16 @@ namespace mPodroznik.Controllers.BusController
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            _busStopID = (int)id;
             id--;
-            int countBusStops = _busStopsVM.Count;
+
+            int countBusStops = _busStopsVMList.Count;
             if (id > countBusStops)
             {
-                var minId = _busStopsVM.ElementAt(0);
+                var minId = _busStopsVMList.ElementAt(0);
                 id = id - (minId.ID - 1);
             }
-            var busStopVM = _busStopsVM.ElementAt((int)id);
+            var busStopVM = _busStopsVMList.ElementAt((int)id);
             if (busStopVM == null)
             {
                 return HttpNotFound();
@@ -62,13 +71,30 @@ namespace mPodroznik.Controllers.BusController
         {
             if (ModelState.IsValid)
             {
-                var bus = db.Buses.FirstOrDefault(x => x.ID == busStopVM.BusID);                
+                var bus = db.Buses.FirstOrDefault(x => x.ID == busStopVM.BusID);
                 var busStop = bus.BusStops.FirstOrDefault(x => x.ID == busStopVM.ID);
                 Mapper.Map(busStopVM, busStop);
+
+                //in case there was a change in the busStopOrder                
+                var busStopID = _busStopsVMList.FirstOrDefault(x => x.ID == _busStopID);
+                if (busStopID.BusStopOrder != busStopVM.BusStopOrder)
+                {
+                    var busStopsToChange = bus.BusStops.Where(x => x.BusStopOrder >= busStopVM.BusStopOrder).ToList();
+                    foreach (var stop in busStopsToChange)
+                    {
+                        if (stop.BusStopName == busStopVM.BusStopName)
+                        {
+                            continue;
+                        }
+                        ++stop.BusStopOrder;
+                    }
+                }
+
+                //add in case busId changes//
+
                 db.SaveChanges();
                 var newBusList = repo.GetBusesFromDB();
                 var newBus = newBusList.Where(x => x.BusNumber == busStopVM.BusID.ToString()).FirstOrDefault();
-
 
                 return RedirectToAction("ShowRouteTable", newBus);
             }
@@ -82,12 +108,48 @@ namespace mPodroznik.Controllers.BusController
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var busStop = _busStopsVM.ElementAt((int)id);
-            if (busStop == null)
+            _busStopID = (int)id;
+            id--;
+
+            int countBusStops = _busStopsVMList.Count;
+            if (id > countBusStops)
+            {
+                var minId = _busStopsVMList.ElementAt(0);
+                id = id - (minId.ID - 1);
+            }
+            _busStopVM = _busStopsVMList.ElementAt((int)id);
+            if (_busStopVM == null)
             {
                 return HttpNotFound();
             }
-            return View(busStop);
+
+            return View("Delete", _busStopVM);
+        }
+
+        // POST: Authors/Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete()
+        {
+            var bus = db.Buses.FirstOrDefault(x => x.ID == _busStopVM.BusID);
+            var busStop = bus.BusStops.FirstOrDefault(x => x.ID == _busStopVM.ID);
+            bus.BusStops.Remove(busStop);
+
+            var busStopsToChange = bus.BusStops.Where(x => x.BusStopOrder >= _busStopVM.BusStopOrder).ToList();
+            foreach (var stop in busStopsToChange)
+            {
+                if (stop.BusStopName == _busStopVM.BusStopName)
+                {
+                    continue;
+                }
+                --stop.BusStopOrder;
+            }
+
+            db.SaveChanges();
+            var newBusList = repo.GetBusesFromDB();
+            var newBus = newBusList.Where(x => x.BusNumber == _busStopVM.BusID.ToString()).FirstOrDefault();
+
+            return RedirectToAction("ShowRouteTable", newBus);
         }
     }
 }

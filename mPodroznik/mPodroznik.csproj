@@ -246,6 +246,7 @@
     <Content Include="Views\Registration\Register.cshtml" />
     <Content Include="Views\BusRoute\ShowRouteTable.cshtml" />
     <Content Include="Views\BusRoute\ShowRouteMap.cshtml" />
+    <Content Include="Views\BusRoute\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
