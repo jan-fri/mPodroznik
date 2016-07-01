@@ -10,20 +10,30 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th>nr</th>
+                <th>Przystanek numer</th>
                 <th>Przystanek</th>
+                <th>Szerokosc</th>
+                <th>Dlugosc</th>
             </tr>
         </thead>
-        <tbody>
-            @{int i = 0;}
-            @foreach (var busStop in Model)
-            {
-                <tr>
-                    <td>@(1 + i)</td>
-                    <td>@busStop.Name</td>
-                </tr>
-                i++;
-            }
+        <tbody data-bind="foreach: busStops">
+            <tr>
+                <td data-bind="text: busStopOrder"></td>
+                <td data-bind="text: busStopName"></td>
+                <td data-bind="text: gpsLat"></td>
+                <td data-bind="text: gpsLng"></td>
+                <td>
+                    <a data-bind="attr: {href: '@Url.Action("Edit")/' + id}" class="btn btn-primary">Edytuj</a>
+                    <a data-bind="attr: {href: '@Url.Action("Delete")/' + id}" class="btn btn-danger">Usun</a>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
+@section Scripts {
+    @Scripts.Render("~/Scripts/Aplication/busStops.js")
+    <script>
+        var viewModel = new ViewModel(@Html.HtmlConvertToJson(Model));
+        ko.applyBindings(viewModel);
+    </script>
+}

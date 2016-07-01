@@ -15,14 +15,8 @@ namespace mPodroznik.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            using (var context = new BusContex())
-            {
-                var buses = context.Buses.ToList();
-
-                repo.MappBusList(buses);
-                var busList = repo.GetBusList();
-                return View(busList);
-            }       
+            var busList = repo.GetBusesFromDB();
+            return View(busList);
         }
 
         [HttpPost]
